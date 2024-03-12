@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:workout_planner/core/theme/app_theme.dart';
+import 'package:workout_planner/features/workout/presentation/views/workouts_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,12 +12,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: Container(),
+      debugShowCheckedModeBanner: false,
+      title: 'Workout Planner',
+      theme: AppTheme.theme,
+      home: const WorkoutsView(),
     );
   }
 }
