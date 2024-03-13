@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:workout_planner/core/constants/app_colors.dart';
 
 abstract class AppTheme {
   static final theme = ThemeData(
     colorScheme: ColorScheme.fromSeed(
       seedColor: Colors.black,
       primary: Colors.white,
-      surface: Colors.black,
+      background: AppColors.background,
     ),
     useMaterial3: true,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.black,
         textStyle: const TextStyle(
           fontSize: 14,
           letterSpacing: 1.3,

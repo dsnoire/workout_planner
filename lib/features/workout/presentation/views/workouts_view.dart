@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
+import 'package:workout_planner/core/constants/app_dimens.dart';
 import 'package:workout_planner/features/workout/presentation/views/manage_workout_view.dart';
-
 import '../../../shared/widgets/custom_app_bar.dart';
+import '../widgets/workouts_list_view.dart';
 
 class WorkoutsView extends StatelessWidget {
   const WorkoutsView({super.key});
@@ -14,12 +14,11 @@ class WorkoutsView extends StatelessWidget {
         title: 'Workouts',
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppDimens.layoutPadding),
         child: Column(
           children: [
-            const Center(
-              child: Text('Lorem ipsum'),
-            ),
+            const WorkoutsListView(),
+            const Spacer(),
             ElevatedButton(
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(
