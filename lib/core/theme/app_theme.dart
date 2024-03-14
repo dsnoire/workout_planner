@@ -3,15 +3,17 @@ import 'package:workout_planner/core/constants/app_colors.dart';
 
 abstract class AppTheme {
   static final theme = ThemeData(
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: Colors.black,
-      primary: Colors.white,
-      background: AppColors.background,
+    colorScheme: const ColorScheme.light(
+      background: Colors.white,
+      primary: Colors.black,
+      secondary: Colors.black,
+      tertiary: Colors.black,
     ),
     useMaterial3: true,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
         textStyle: const TextStyle(
           fontSize: 14,
           letterSpacing: 1.3,
@@ -54,10 +56,12 @@ abstract class AppTheme {
       centerTitle: true,
     ),
     inputDecorationTheme: InputDecorationTheme(
+      labelStyle: const TextStyle(color: AppColors.grey),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(15),
         borderSide: BorderSide.none,
       ),
+      fillColor: AppColors.background,
       filled: true,
     ),
   );

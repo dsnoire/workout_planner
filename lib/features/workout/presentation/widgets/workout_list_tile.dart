@@ -14,7 +14,7 @@ class WorkoutListTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.background,
         borderRadius: BorderRadius.circular(20),
         boxShadow: const [
           BoxShadow(
@@ -59,7 +59,7 @@ class WorkoutListTile extends StatelessWidget {
               workoutWeekdays.length,
               (index) {
                 return CircleAvatar(
-                  backgroundColor: AppColors.background,
+                  backgroundColor: AppColors.lightGrey,
                   child: Text(
                     workoutWeekdays.keys.getWeekdayAbbreviation(index: index),
                     style: Theme.of(context).textTheme.labelMedium,

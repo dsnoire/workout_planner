@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:workout_planner/core/theme/app_theme.dart';
+import 'package:workout_planner/features/workout/presentation/views/manage_workout_view.dart';
 import 'package:workout_planner/features/workout/presentation/views/workouts_view.dart';
 
 void main() {

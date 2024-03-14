@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workout_planner/core/constants/app_colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -14,7 +15,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         title,
         style: const TextStyle(
           fontSize: 16,
-          color: Color(0xFF979797),
+          color: AppColors.grey,
           letterSpacing: 1.3,
         ),
       ),
