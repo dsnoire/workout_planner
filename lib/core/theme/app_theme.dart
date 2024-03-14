@@ -56,13 +56,22 @@ abstract class AppTheme {
       centerTitle: true,
     ),
     inputDecorationTheme: InputDecorationTheme(
-      labelStyle: const TextStyle(color: AppColors.grey),
+      labelStyle: const TextStyle(
+        color: Colors.black,
+        fontSize: 16,
+      ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(15),
         borderSide: BorderSide.none,
       ),
-      fillColor: AppColors.background,
+      fillColor: AppColors.lightSurface,
       filled: true,
+    ),
+    listTileTheme: ListTileThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+      ),
+      tileColor: AppColors.lightSurface,
     ),
   );
 }

@@ -9,16 +9,18 @@ class WeekdaysPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Weekdays',
-          style: Theme.of(context).textTheme.labelLarge,
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
-        Wrap(
-          runSpacing: 8,
-          spacing: 7,
-          alignment: WrapAlignment.center,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(
             workoutWeekdays.length,
             (index) {
@@ -30,9 +32,9 @@ class WeekdaysPicker extends StatelessWidget {
                     vertical: 10,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.background,
+                    color: AppColors.lightSurface,
                     border: Border.all(
-                      color: const Color.fromARGB(255, 255, 255, 255),
+                      color: const Color(0xFFFFFFFF),
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),

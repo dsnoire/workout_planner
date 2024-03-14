@@ -14,7 +14,7 @@ class WorkoutListTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.background,
+        color: AppColors.lightSurface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: const [
           BoxShadow(

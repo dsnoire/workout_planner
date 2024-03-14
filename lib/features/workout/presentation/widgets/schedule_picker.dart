@@ -8,10 +8,14 @@ class SchedulePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Schedule',
-          style: Theme.of(context).textTheme.labelLarge,
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
         DecoratedBox(
@@ -20,7 +24,7 @@ class SchedulePicker extends StatelessWidget {
             //   color: Colors.black,
             //   width: 0.7,
             // ),
-            color: AppColors.background,
+            color: AppColors.lightSurface,
             borderRadius: BorderRadius.circular(30),
           ),
           child: DropdownButton<ScheduleEnum>(
@@ -31,17 +35,15 @@ class SchedulePicker extends StatelessWidget {
             ),
             underline: const SizedBox(),
             icon: const Icon(Icons.keyboard_arrow_down_rounded),
-            dropdownColor: AppColors.background,
+            dropdownColor: AppColors.lightSurface,
             value: ScheduleEnum.fullBody,
             items: ScheduleEnum.values.map(
               (schedule) {
                 return DropdownMenuItem(
                   value: schedule,
-                  child: Center(
-                    child: Text(
-                      schedule.name,
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
+                  child: Text(
+                    schedule.name,
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                 );
               },

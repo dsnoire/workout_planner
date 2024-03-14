@@ -4,6 +4,7 @@ import 'package:workout_planner/features/shared/widgets/custom_app_bar.dart';
 
 import '../widgets/color_picker.dart';
 import '../widgets/schedule_picker.dart';
+import '../widgets/start_date_picker.dart';
 import '../widgets/weekdays_picker.dart';
 
 class ManageWorkoutView extends StatelessWidget {
@@ -27,7 +28,9 @@ class ManageWorkoutView extends StatelessWidget {
             const ColorPicker(),
             const SizedBox(height: 32),
             const SchedulePicker(),
-            const SizedBox(height: 40),
+            const SizedBox(height: 32),
+            const StartDatePicker(),
+            const SizedBox(height: 32),
             const WeekdaysPicker(),
             const Spacer(),
             ElevatedButton(
