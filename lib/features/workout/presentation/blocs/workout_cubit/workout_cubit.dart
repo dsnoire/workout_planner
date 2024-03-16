@@ -11,16 +11,44 @@ class WorkoutCubit extends Cubit<WorkoutState> {
   WorkoutCubit(this.workoutRepository) : super(WorkoutLoaded(const []));
 
   Future<void> getAllWorkouts() async {
-    emit(WorkoutLoading());
-    final workouts = await workoutRepository.getAllWorkouts();
-    emit(WorkoutLoaded(workouts));
+    try {
+      emit(WorkoutLoading());
+      final workouts = await workoutRepository.getAllWorkouts();
+      if (workouts.isEmpty) {
+        emit(WorkoutEmpty());
+      } else {
+        emit(WorkoutLoaded(workouts));
+      }
+    } catch (e) {
+      emit(WorkoutError(e.toString()));
+    }
   }
 
   Future<void> createWorkout(Workout workout) async {
     try {
       emit(WorkoutLoading());
       await workoutRepository.createWorkout(workout);
-      emit(WorkoutLoaded(await workoutRepository.getAllWorkouts()));
+      await getAllWorkouts();
+    } catch (e) {
+      emit(WorkoutError(e.toString()));
+    }
+  }
+
+  Future<void> deleteWorkout(Workout workout) async {
+    try {
+      emit(WorkoutLoading());
+      await workoutRepository.deleteWorkout(workout);
+      await getAllWorkouts();
+    } catch (e) {
+      emit(WorkoutError(e.toString()));
+    }
+  }
+
+  Future<void> deleteAllWorkouts() async {
+    try {
+      emit(WorkoutLoading());
+      await workoutRepository.deleteAllWorkouts();
+      await getAllWorkouts();
     } catch (e) {
       emit(WorkoutError(e.toString()));
     }

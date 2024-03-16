@@ -12,8 +12,16 @@ class WorkoutsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: 'Workouts',
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await context.read<WorkoutCubit>().deleteAllWorkouts();
+            },
+            icon: const Icon(Icons.delete),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(AppDimens.layoutPadding),

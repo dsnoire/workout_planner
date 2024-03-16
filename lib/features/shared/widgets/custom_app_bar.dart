@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:workout_planner/core/constants/app_colors.dart';
+
+import '../../../core/constants/app_colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final List<Widget>? actions;
   const CustomAppBar({
     Key? key,
     required this.title,
+    this.actions,
   }) : super(key: key);
 
   @override
@@ -20,6 +23,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           letterSpacing: 1.3,
         ),
       ),
+      actions: actions,
     );
   }
 
