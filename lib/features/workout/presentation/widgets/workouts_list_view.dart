@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+
+import 'package:workout_planner/features/workout/domain/models/workout.dart';
+
 import 'workout_list_tile.dart';
 
 class WorkoutsListView extends StatelessWidget {
+  final List<Workout> workouts;
   const WorkoutsListView({
-    super.key,
-  });
+    Key? key,
+    required this.workouts,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +22,12 @@ class WorkoutsListView extends StatelessWidget {
           left: 4,
         ),
         separatorBuilder: (_, __) => const SizedBox(height: 16),
-        itemCount: 24,
+        itemCount: workouts.length,
         itemBuilder: (
           BuildContext context,
           int index,
         ) {
-          return const WorkoutListTile();
+          return WorkoutListTile(workout: workouts[index]);
         },
       ),
     );

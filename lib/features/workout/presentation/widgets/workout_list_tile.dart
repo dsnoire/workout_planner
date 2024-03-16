@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+
+import 'package:workout_planner/features/workout/domain/models/workout.dart';
 import 'package:workout_planner/features/workout/presentation/utils/extensions/weekday_abbreviation.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../utils/workout_weekdays.dart';
 
 class WorkoutListTile extends StatelessWidget {
+  final Workout workout;
   const WorkoutListTile({
-    super.key,
-  });
+    Key? key,
+    required this.workout,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +39,7 @@ class WorkoutListTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Workout name',
+                workout.name,
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium!
@@ -49,7 +53,7 @@ class WorkoutListTile extends StatelessWidget {
             ],
           ),
           Text(
-            'FBW',
+            'X',
             style: Theme.of(context).textTheme.labelSmall,
           ),
           const SizedBox(height: 16),
