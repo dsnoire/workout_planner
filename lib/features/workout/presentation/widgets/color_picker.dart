@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
-
 import '../utils/workout_colors.dart';
 
-class ColorPicker extends StatelessWidget {
-  const ColorPicker({super.key});
+class ColorPicker extends StatefulWidget {
+  final Map<int, bool> colors;
+  const ColorPicker({
+    Key? key,
+    required this.colors,
+  }) : super(key: key);
 
+  @override
+  State<ColorPicker> createState() => _ColorPickerState();
+}
+
+class _ColorPickerState extends State<ColorPicker> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -12,15 +20,28 @@ class ColorPicker extends StatelessWidget {
       child: ListView.separated(
         separatorBuilder: (_, __) => const SizedBox(width: 20),
         scrollDirection: Axis.horizontal,
-        itemCount: workoutColors.length,
+        itemCount: widget.colors.length,
         itemBuilder: (
           BuildContext context,
           int index,
         ) {
           return GestureDetector(
-            onTap: () {},
+            onTap: () {
+              setState(() {
+                widget.colors.updateAll((key, value) {
+                  if (workoutColors.keys.elementAt(index) == key) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                });
+              });
+            },
             child: CircleAvatar(
-              backgroundColor: workoutColors.keys.elementAt(index),
+              backgroundColor: Color(widget.colors.keys.elementAt(index)),
+              child: widget.colors.values.elementAt(index)
+                  ? const Icon(Icons.check)
+                  : null,
             ),
           );
         },

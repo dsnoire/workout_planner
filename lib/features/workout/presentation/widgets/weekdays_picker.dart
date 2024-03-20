@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:workout_planner/core/constants/app_colors.dart';
-import 'package:workout_planner/features/workout/presentation/utils/extensions/weekday_abbreviation.dart';
-import 'package:workout_planner/features/workout/presentation/utils/workout_weekdays.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../utils/extensions/weekday_abbreviation.dart';
+import '../utils/workout_weekdays.dart';
 
 class WeekdaysPicker extends StatelessWidget {
   const WeekdaysPicker({super.key});

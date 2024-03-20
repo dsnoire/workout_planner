@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:workout_planner/core/constants/app_colors.dart';
-import 'package:workout_planner/features/workout/presentation/utils/enums/schedule_enum.dart';
 
-class SchedulePicker extends StatelessWidget {
-  const SchedulePicker({super.key});
+import '../../../../core/constants/app_colors.dart';
+import '../utils/enums/schedule_enum.dart';
 
+class SchedulePicker extends StatefulWidget {
+  ScheduleEnum schedule;
+  SchedulePicker({
+    Key? key,
+    required this.schedule,
+  }) : super(key: key);
+
+  @override
+  State<SchedulePicker> createState() => _SchedulePickerState();
+}
+
+class _SchedulePickerState extends State<SchedulePicker> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,7 +46,7 @@ class SchedulePicker extends StatelessWidget {
             underline: const SizedBox(),
             icon: const Icon(Icons.keyboard_arrow_down_rounded),
             dropdownColor: AppColors.lightSurface,
-            value: ScheduleEnum.fullBody,
+            value: widget.schedule,
             items: ScheduleEnum.values.map(
               (schedule) {
                 return DropdownMenuItem(
@@ -48,7 +58,11 @@ class SchedulePicker extends StatelessWidget {
                 );
               },
             ).toList(),
-            onChanged: (x) {},
+            onChanged: (ScheduleEnum? schedule) {
+              setState(() {
+                widget.schedule = schedule!;
+              });
+            },
           ),
         ),
       ],

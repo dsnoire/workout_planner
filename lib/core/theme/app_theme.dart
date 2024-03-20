@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:workout_planner/core/constants/app_colors.dart';
+import '../constants/app_colors.dart';
 
 abstract class AppTheme {
   static final theme = ThemeData(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:workout_planner/core/constants/app_dimens.dart';
-import 'package:workout_planner/features/workout/presentation/views/manage_workout_view.dart';
+import '../../../../core/constants/app_dimens.dart';
+import 'manage_workout_view.dart';
 import '../../../shared/widgets/custom_app_bar.dart';
 import '../blocs/workout_cubit/workout_cubit.dart';
 import '../widgets/workouts_list_view.dart';

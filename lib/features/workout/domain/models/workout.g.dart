@@ -17,10 +17,21 @@ const WorkoutSchema = CollectionSchema(
   name: r'Workout',
   id: 1535508263686820971,
   properties: {
-    r'name': PropertySchema(
+    r'color': PropertySchema(
       id: 0,
+      name: r'color',
+      type: IsarType.long,
+    ),
+    r'name': PropertySchema(
+      id: 1,
       name: r'name',
       type: IsarType.string,
+    ),
+    r'schedule': PropertySchema(
+      id: 2,
+      name: r'schedule',
+      type: IsarType.string,
+      enumMap: _WorkoutscheduleEnumValueMap,
     )
   },
   estimateSize: _workoutEstimateSize,
@@ -44,6 +55,12 @@ int _workoutEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.name.length * 3;
+  {
+    final value = object.schedule;
+    if (value != null) {
+      bytesCount += 3 + value.name.length * 3;
+    }
+  }
   return bytesCount;
 }
 
@@ -53,7 +70,9 @@ void _workoutSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.name);
+  writer.writeLong(offsets[0], object.color);
+  writer.writeString(offsets[1], object.name);
+  writer.writeString(offsets[2], object.schedule?.name);
 }
 
 Workout _workoutDeserialize(
@@ -63,8 +82,11 @@ Workout _workoutDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Workout();
+  object.color = reader.readLong(offsets[0]);
   object.id = id;
-  object.name = reader.readString(offsets[0]);
+  object.name = reader.readString(offsets[1]);
+  object.schedule =
+      _WorkoutscheduleValueEnumMap[reader.readStringOrNull(offsets[2])];
   return object;
 }
 
@@ -76,11 +98,29 @@ P _workoutDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
+      return (reader.readLong(offset)) as P;
+    case 1:
       return (reader.readString(offset)) as P;
+    case 2:
+      return (_WorkoutscheduleValueEnumMap[reader.readStringOrNull(offset)])
+          as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
+
+const _WorkoutscheduleEnumValueMap = {
+  r'fullBody': r'fullBody',
+  r'pushPullLegs': r'pushPullLegs',
+  r'upperLower': r'upperLower',
+  r'split': r'split',
+};
+const _WorkoutscheduleValueEnumMap = {
+  r'fullBody': ScheduleEnum.fullBody,
+  r'pushPullLegs': ScheduleEnum.pushPullLegs,
+  r'upperLower': ScheduleEnum.upperLower,
+  r'split': ScheduleEnum.split,
+};
 
 Id _workoutGetId(Workout object) {
   return object.id;
@@ -171,6 +211,59 @@ extension WorkoutQueryWhere on QueryBuilder<Workout, Workout, QWhereClause> {
 
 extension WorkoutQueryFilter
     on QueryBuilder<Workout, Workout, QFilterCondition> {
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> colorEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'color',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> colorGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'color',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> colorLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'color',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> colorBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'color',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Workout, Workout, QAfterFilterCondition> idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -352,6 +445,152 @@ extension WorkoutQueryFilter
       ));
     });
   }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> scheduleIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'schedule',
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> scheduleIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'schedule',
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> scheduleEqualTo(
+    ScheduleEnum? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'schedule',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> scheduleGreaterThan(
+    ScheduleEnum? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'schedule',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> scheduleLessThan(
+    ScheduleEnum? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'schedule',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> scheduleBetween(
+    ScheduleEnum? lower,
+    ScheduleEnum? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'schedule',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> scheduleStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'schedule',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> scheduleEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'schedule',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> scheduleContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'schedule',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> scheduleMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'schedule',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> scheduleIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'schedule',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> scheduleIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'schedule',
+        value: '',
+      ));
+    });
+  }
 }
 
 extension WorkoutQueryObject
@@ -361,6 +600,18 @@ extension WorkoutQueryLinks
     on QueryBuilder<Workout, Workout, QFilterCondition> {}
 
 extension WorkoutQuerySortBy on QueryBuilder<Workout, Workout, QSortBy> {
+  QueryBuilder<Workout, Workout, QAfterSortBy> sortByColor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'color', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterSortBy> sortByColorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'color', Sort.desc);
+    });
+  }
+
   QueryBuilder<Workout, Workout, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -372,10 +623,34 @@ extension WorkoutQuerySortBy on QueryBuilder<Workout, Workout, QSortBy> {
       return query.addSortBy(r'name', Sort.desc);
     });
   }
+
+  QueryBuilder<Workout, Workout, QAfterSortBy> sortBySchedule() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'schedule', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterSortBy> sortByScheduleDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'schedule', Sort.desc);
+    });
+  }
 }
 
 extension WorkoutQuerySortThenBy
     on QueryBuilder<Workout, Workout, QSortThenBy> {
+  QueryBuilder<Workout, Workout, QAfterSortBy> thenByColor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'color', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterSortBy> thenByColorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'color', Sort.desc);
+    });
+  }
+
   QueryBuilder<Workout, Workout, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -399,14 +674,39 @@ extension WorkoutQuerySortThenBy
       return query.addSortBy(r'name', Sort.desc);
     });
   }
+
+  QueryBuilder<Workout, Workout, QAfterSortBy> thenBySchedule() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'schedule', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterSortBy> thenByScheduleDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'schedule', Sort.desc);
+    });
+  }
 }
 
 extension WorkoutQueryWhereDistinct
     on QueryBuilder<Workout, Workout, QDistinct> {
+  QueryBuilder<Workout, Workout, QDistinct> distinctByColor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'color');
+    });
+  }
+
   QueryBuilder<Workout, Workout, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QDistinct> distinctBySchedule(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'schedule', caseSensitive: caseSensitive);
     });
   }
 }
@@ -419,9 +719,21 @@ extension WorkoutQueryProperty
     });
   }
 
+  QueryBuilder<Workout, int, QQueryOperations> colorProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'color');
+    });
+  }
+
   QueryBuilder<Workout, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
+    });
+  }
+
+  QueryBuilder<Workout, ScheduleEnum?, QQueryOperations> scheduleProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'schedule');
     });
   }
 }

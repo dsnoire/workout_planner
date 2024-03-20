@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:workout_planner/features/workout/domain/models/workout.dart';
-import 'package:workout_planner/features/workout/presentation/blocs/workout_cubit/workout_cubit.dart';
-import 'package:workout_planner/features/workout/presentation/utils/extensions/weekday_abbreviation.dart';
-
 import '../../../../core/constants/app_colors.dart';
+import '../../domain/models/workout.dart';
+import '../blocs/workout_cubit/workout_cubit.dart';
+import '../utils/extensions/weekday_abbreviation.dart';
 import '../utils/workout_weekdays.dart';
+import '../views/manage_workout_view.dart';
 
 class WorkoutListTile extends StatelessWidget {
   final Workout workout;
@@ -18,8 +18,11 @@ class WorkoutListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        await context.read<WorkoutCubit>().deleteWorkout(workout);
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (ctx) => ManageWorkoutView(
+                  workout: workout,
+                )));
       },
       child: Container(
         padding: const EdgeInsets.all(16),
@@ -59,7 +62,7 @@ class WorkoutListTile extends StatelessWidget {
               ],
             ),
             Text(
-              'X',
+              workout.schedule.toString(),
               style: Theme.of(context).textTheme.labelSmall,
             ),
             const SizedBox(height: 16),
@@ -69,7 +72,7 @@ class WorkoutListTile extends StatelessWidget {
                 workoutWeekdays.length,
                 (index) {
                   return CircleAvatar(
-                    backgroundColor: AppColors.lightGrey,
+                    backgroundColor: Color(workout.color),
                     child: Text(
                       workoutWeekdays.keys.getWeekdayAbbreviation(index: index),
                       style: Theme.of(context).textTheme.labelMedium,

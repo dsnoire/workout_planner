@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:workout_planner/features/workout/domain/models/workout.dart';
-
+import '../../domain/models/workout.dart';
 import 'workout_list_tile.dart';
 
 class WorkoutsListView extends StatelessWidget {

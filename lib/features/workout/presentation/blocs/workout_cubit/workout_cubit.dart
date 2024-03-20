@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:workout_planner/features/workout/domain/repositories/workout_repository.dart';
+import '../../../domain/repositories/workout_repository.dart';
 
 import '../../../domain/models/workout.dart';
 
