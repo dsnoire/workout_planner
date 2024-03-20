@@ -30,6 +30,7 @@ class _ManageWorkoutViewState extends State<ManageWorkoutView> {
   @override
   void initState() {
     if (widget.workout == null) {
+      schedule = ScheduleEnum.fullBody;
       colors = workoutColors..updateAll((key, value) => false);
     } else {
       colors = workoutColors
@@ -42,8 +43,8 @@ class _ManageWorkoutViewState extends State<ManageWorkoutView> {
             }
           },
         );
+      schedule = widget.workout!.schedule;
     }
-    schedule = ScheduleEnum.split;
     super.initState();
   }
 
@@ -67,7 +68,14 @@ class _ManageWorkoutViewState extends State<ManageWorkoutView> {
             const SizedBox(height: 16),
             ColorPicker(colors: colors),
             const SizedBox(height: 32),
-            SchedulePicker(schedule: schedule),
+            SchedulePicker(
+                schedule: schedule,
+                onChanged: (ScheduleEnum? value) {
+                  setState(() {
+                    schedule = value!;
+                    print(schedule);
+                  });
+                }),
             const SizedBox(height: 32),
             const StartDatePicker(),
             const SizedBox(height: 32),

@@ -9,6 +9,6 @@ class Workout {
   Id id = Isar.autoIncrement;
   late String name;
   late int color;
-  @Enumerated(EnumType.name)
-  ScheduleEnum? schedule;
+  @enumerated
+  late ScheduleEnum schedule;
 }
