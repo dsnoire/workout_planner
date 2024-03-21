@@ -7,6 +7,7 @@ import '../../domain/models/workout.dart';
 import '../blocs/workout_cubit/workout_cubit.dart';
 import '../utils/enums/schedule_enum.dart';
 import '../utils/workout_colors.dart';
+import '../utils/workout_weekdays.dart';
 import '../widgets/color_picker.dart';
 import '../widgets/schedule_picker.dart';
 import '../widgets/start_date_picker.dart';
@@ -25,6 +26,7 @@ class ManageWorkoutView extends StatefulWidget {
 
 class _ManageWorkoutViewState extends State<ManageWorkoutView> {
   late Map<int, bool> colors;
+  late Map<String, bool> weekdays;
   late ScheduleEnum schedule;
 
   @override
@@ -32,6 +34,7 @@ class _ManageWorkoutViewState extends State<ManageWorkoutView> {
     if (widget.workout == null) {
       schedule = ScheduleEnum.fullBody;
       colors = workoutColors..updateAll((key, value) => false);
+      weekdays = workoutWeekdays;
     } else {
       colors = workoutColors
         ..updateAll(
@@ -79,7 +82,7 @@ class _ManageWorkoutViewState extends State<ManageWorkoutView> {
             const SizedBox(height: 32),
             const StartDatePicker(),
             const SizedBox(height: 32),
-            const WeekdaysPicker(),
+            WeekdaysPicker(weekdays: weekdays),
             const Spacer(),
             ElevatedButton(
               onPressed: () async {
