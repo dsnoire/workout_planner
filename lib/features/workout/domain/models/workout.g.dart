@@ -22,16 +22,26 @@ const WorkoutSchema = CollectionSchema(
       name: r'color',
       type: IsarType.long,
     ),
-    r'name': PropertySchema(
+    r'date': PropertySchema(
       id: 1,
+      name: r'date',
+      type: IsarType.dateTime,
+    ),
+    r'name': PropertySchema(
+      id: 2,
       name: r'name',
       type: IsarType.string,
     ),
     r'schedule': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'schedule',
       type: IsarType.byte,
       enumMap: _WorkoutscheduleEnumValueMap,
+    ),
+    r'weekdays': PropertySchema(
+      id: 4,
+      name: r'weekdays',
+      type: IsarType.stringList,
     )
   },
   estimateSize: _workoutEstimateSize,
@@ -55,6 +65,13 @@ int _workoutEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.name.length * 3;
+  bytesCount += 3 + object.weekdays.length * 3;
+  {
+    for (var i = 0; i < object.weekdays.length; i++) {
+      final value = object.weekdays[i];
+      bytesCount += value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
@@ -65,8 +82,10 @@ void _workoutSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.color);
-  writer.writeString(offsets[1], object.name);
-  writer.writeByte(offsets[2], object.schedule.index);
+  writer.writeDateTime(offsets[1], object.date);
+  writer.writeString(offsets[2], object.name);
+  writer.writeByte(offsets[3], object.schedule.index);
+  writer.writeStringList(offsets[4], object.weekdays);
 }
 
 Workout _workoutDeserialize(
@@ -77,11 +96,13 @@ Workout _workoutDeserialize(
 ) {
   final object = Workout();
   object.color = reader.readLong(offsets[0]);
+  object.date = reader.readDateTime(offsets[1]);
   object.id = id;
-  object.name = reader.readString(offsets[1]);
+  object.name = reader.readString(offsets[2]);
   object.schedule =
-      _WorkoutscheduleValueEnumMap[reader.readByteOrNull(offsets[2])] ??
+      _WorkoutscheduleValueEnumMap[reader.readByteOrNull(offsets[3])] ??
           ScheduleEnum.fullBody;
+  object.weekdays = reader.readStringList(offsets[4]) ?? [];
   return object;
 }
 
@@ -95,10 +116,14 @@ P _workoutDeserializeProp<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
-      return (reader.readString(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 2:
+      return (reader.readString(offset)) as P;
+    case 3:
       return (_WorkoutscheduleValueEnumMap[reader.readByteOrNull(offset)] ??
           ScheduleEnum.fullBody) as P;
+    case 4:
+      return (reader.readStringList(offset) ?? []) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -251,6 +276,59 @@ extension WorkoutQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'color',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> dateEqualTo(
+      DateTime value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'date',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> dateGreaterThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'date',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> dateLessThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'date',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> dateBetween(
+    DateTime lower,
+    DateTime upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'date',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -493,6 +571,225 @@ extension WorkoutQueryFilter
       ));
     });
   }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> weekdaysElementEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'weekdays',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition>
+      weekdaysElementGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'weekdays',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> weekdaysElementLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'weekdays',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> weekdaysElementBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'weekdays',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition>
+      weekdaysElementStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'weekdays',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> weekdaysElementEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'weekdays',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> weekdaysElementContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'weekdays',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> weekdaysElementMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'weekdays',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition>
+      weekdaysElementIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'weekdays',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition>
+      weekdaysElementIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'weekdays',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> weekdaysLengthEqualTo(
+      int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'weekdays',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> weekdaysIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'weekdays',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> weekdaysIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'weekdays',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> weekdaysLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'weekdays',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition>
+      weekdaysLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'weekdays',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterFilterCondition> weekdaysLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'weekdays',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
 }
 
 extension WorkoutQueryObject
@@ -511,6 +808,18 @@ extension WorkoutQuerySortBy on QueryBuilder<Workout, Workout, QSortBy> {
   QueryBuilder<Workout, Workout, QAfterSortBy> sortByColorDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'color', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterSortBy> sortByDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'date', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterSortBy> sortByDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'date', Sort.desc);
     });
   }
 
@@ -550,6 +859,18 @@ extension WorkoutQuerySortThenBy
   QueryBuilder<Workout, Workout, QAfterSortBy> thenByColorDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'color', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterSortBy> thenByDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'date', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QAfterSortBy> thenByDateDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'date', Sort.desc);
     });
   }
 
@@ -598,6 +919,12 @@ extension WorkoutQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Workout, Workout, QDistinct> distinctByDate() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'date');
+    });
+  }
+
   QueryBuilder<Workout, Workout, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -608,6 +935,12 @@ extension WorkoutQueryWhereDistinct
   QueryBuilder<Workout, Workout, QDistinct> distinctBySchedule() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'schedule');
+    });
+  }
+
+  QueryBuilder<Workout, Workout, QDistinct> distinctByWeekdays() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'weekdays');
     });
   }
 }
@@ -626,6 +959,12 @@ extension WorkoutQueryProperty
     });
   }
 
+  QueryBuilder<Workout, DateTime, QQueryOperations> dateProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'date');
+    });
+  }
+
   QueryBuilder<Workout, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
@@ -635,6 +974,12 @@ extension WorkoutQueryProperty
   QueryBuilder<Workout, ScheduleEnum, QQueryOperations> scheduleProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'schedule');
+    });
+  }
+
+  QueryBuilder<Workout, List<String>, QQueryOperations> weekdaysProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'weekdays');
     });
   }
 }

@@ -11,4 +11,6 @@ class Workout {
   late int color;
   @enumerated
   late ScheduleEnum schedule;
+  late DateTime date;
+  late List<String> weekdays;
 }

@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class StartDatePicker extends StatefulWidget {
-  const StartDatePicker({super.key});
+  final DateTime xd;
+  final Function(DateTime date) onChanged;
+  const StartDatePicker({
+    Key? key,
+    required this.xd,
+    required this.onChanged,
+  }) : super(key: key);
 
   @override
   State<StartDatePicker> createState() => _StartDatePickerState();
 }
 
 class _StartDatePickerState extends State<StartDatePicker> {
-  DateTime date = DateTime.now();
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -26,7 +30,7 @@ class _StartDatePickerState extends State<StartDatePicker> {
         const SizedBox(height: 16),
         ListTile(
           leading: const Icon(Icons.calendar_month),
-          title: Text(DateFormat().add_yMMMd().format(date)),
+          title: Text(DateFormat().add_yMMMd().format(widget.xd)),
           onTap: () async {
             DateTime? selectedDate = await showDatePicker(
               context: context,
@@ -35,9 +39,7 @@ class _StartDatePickerState extends State<StartDatePicker> {
               lastDate: DateTime(2050),
             );
             if (selectedDate != null) {
-              setState(() {
-                date = selectedDate;
-              });
+              widget.onChanged(selectedDate);
             }
           },
         ),

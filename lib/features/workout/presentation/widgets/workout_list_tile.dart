@@ -61,9 +61,17 @@ class WorkoutListTile extends StatelessWidget {
                 ),
               ],
             ),
-            Text(
-              workout.schedule.name,
-              style: Theme.of(context).textTheme.labelSmall,
+            Row(
+              children: [
+                Text(
+                  workout.schedule.name,
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+                Text(
+                  workout.date.toString(),
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+              ],
             ),
             const SizedBox(height: 16),
             Row(
@@ -71,8 +79,13 @@ class WorkoutListTile extends StatelessWidget {
               children: List.generate(
                 workoutWeekdays.length,
                 (index) {
+                  final isSelected = workout.weekdays.contains(
+                    workoutWeekdays.keys.elementAt(index),
+                  );
                   return CircleAvatar(
-                    backgroundColor: Color(workout.color),
+                    backgroundColor: Color(
+                      isSelected ? workout.color : AppColors.lightGrey.value,
+                    ),
                     child: Text(
                       workoutWeekdays.keys.getWeekdayAbbreviation(index: index),
                       style: Theme.of(context).textTheme.labelMedium,

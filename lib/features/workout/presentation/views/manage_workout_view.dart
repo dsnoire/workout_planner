@@ -28,13 +28,15 @@ class _ManageWorkoutViewState extends State<ManageWorkoutView> {
   late Map<int, bool> colors;
   late Map<String, bool> weekdays;
   late ScheduleEnum schedule;
+  late DateTime date;
 
   @override
   void initState() {
     if (widget.workout == null) {
       schedule = ScheduleEnum.fullBody;
       colors = workoutColors..updateAll((key, value) => false);
-      weekdays = workoutWeekdays;
+      weekdays = workoutWeekdays..updateAll((key, value) => false);
+      date = DateTime.now();
     } else {
       colors = workoutColors
         ..updateAll(
@@ -47,6 +49,15 @@ class _ManageWorkoutViewState extends State<ManageWorkoutView> {
           },
         );
       schedule = widget.workout!.schedule;
+      date = widget.workout!.date;
+      weekdays = workoutWeekdays
+        ..updateAll((key, value) {
+          if (widget.workout!.weekdays.any((element) => element == key)) {
+            return true;
+          } else {
+            return false;
+          }
+        });
     }
     super.initState();
   }
@@ -80,7 +91,13 @@ class _ManageWorkoutViewState extends State<ManageWorkoutView> {
                   });
                 }),
             const SizedBox(height: 32),
-            const StartDatePicker(),
+            StartDatePicker(
+                xd: date,
+                onChanged: (DateTime x) {
+                  setState(() {
+                    date = x;
+                  });
+                }),
             const SizedBox(height: 32),
             WeekdaysPicker(weekdays: weekdays),
             const Spacer(),
@@ -93,7 +110,12 @@ class _ManageWorkoutViewState extends State<ManageWorkoutView> {
                 final workout = Workout()
                   ..name = nameController.text
                   ..color = color
-                  ..schedule = schedule;
+                  ..schedule = schedule
+                  ..date = date
+                  ..weekdays = weekdays.entries
+                      .where((element) => element.value == true)
+                      .map((e) => e.key)
+                      .toList();
 
                 await context.read<WorkoutCubit>().createWorkout(workout);
                 Navigator.of(context).pop();
