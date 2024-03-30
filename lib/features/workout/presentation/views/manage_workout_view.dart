@@ -25,18 +25,31 @@ class ManageWorkoutView extends StatefulWidget {
 }
 
 class _ManageWorkoutViewState extends State<ManageWorkoutView> {
+  late TextEditingController nameController;
   late Map<int, bool> colors;
-  late Map<String, bool> weekdays;
   late ScheduleEnum schedule;
   late DateTime date;
+  late Map<String, bool> weekdays;
 
   @override
   void initState() {
+    nameController = TextEditingController(text: widget.workout?.name);
+    initializeValues();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
+
+  void initializeValues() {
     if (widget.workout == null) {
-      schedule = ScheduleEnum.fullBody;
       colors = workoutColors..updateAll((key, value) => false);
-      weekdays = workoutWeekdays..updateAll((key, value) => false);
+      schedule = ScheduleEnum.fullBody;
       date = DateTime.now();
+      weekdays = workoutWeekdays..updateAll((key, value) => false);
     } else {
       colors = workoutColors
         ..updateAll(
@@ -59,13 +72,28 @@ class _ManageWorkoutViewState extends State<ManageWorkoutView> {
           }
         });
     }
-    super.initState();
+  }
+
+  Future<void> addWorkout() async {
+    final color = colors.entries
+        .firstWhere((element) => element.value == true,
+            orElse: () => workoutColors.entries.first)
+        .key;
+    final workout = Workout()
+      ..name = nameController.text
+      ..color = color
+      ..schedule = schedule
+      ..date = date
+      ..weekdays = weekdays.entries
+          .where((element) => element.value == true)
+          .map((e) => e.key)
+          .toList();
+
+    await context.read<WorkoutCubit>().createWorkout(workout);
   }
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController nameController = TextEditingController();
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: const CustomAppBar(title: 'New Workout'),
@@ -103,22 +131,8 @@ class _ManageWorkoutViewState extends State<ManageWorkoutView> {
             const Spacer(),
             ElevatedButton(
               onPressed: () async {
-                final color = colors.entries
-                    .firstWhere((element) => element.value == true,
-                        orElse: () => workoutColors.entries.first)
-                    .key;
-                final workout = Workout()
-                  ..name = nameController.text
-                  ..color = color
-                  ..schedule = schedule
-                  ..date = date
-                  ..weekdays = weekdays.entries
-                      .where((element) => element.value == true)
-                      .map((e) => e.key)
-                      .toList();
-
-                await context.read<WorkoutCubit>().createWorkout(workout);
-                Navigator.of(context).pop();
+                await addWorkout();
+                if (context.mounted) Navigator.of(context).pop();
               },
               child: const Text('Add Workout'),
             ),
