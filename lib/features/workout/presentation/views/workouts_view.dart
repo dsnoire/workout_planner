@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_dimens.dart';
 import 'manage_workout_view.dart';
 import '../../../shared/widgets/custom_app_bar.dart';
@@ -41,16 +42,14 @@ class WorkoutsView extends StatelessWidget {
                 }
               },
             ),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (BuildContext context) => const ManageWorkoutView(),
-                ),
-              ),
-              child: const Text('New Workout'),
-            ),
           ],
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: FloatingActionButton(
+          onPressed: () => context.push('/new-workout'),
+          child: const Icon(Icons.add),
         ),
       ),
     );

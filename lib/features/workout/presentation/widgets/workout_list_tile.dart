@@ -61,17 +61,9 @@ class WorkoutListTile extends StatelessWidget {
                 ),
               ],
             ),
-            Row(
-              children: [
-                Text(
-                  workout.schedule.name,
-                  style: Theme.of(context).textTheme.labelSmall,
-                ),
-                Text(
-                  workout.date.toString(),
-                  style: Theme.of(context).textTheme.labelSmall,
-                ),
-              ],
+            Text(
+              workout.schedule.name,
+              style: Theme.of(context).textTheme.labelSmall,
             ),
             const SizedBox(height: 16),
             Row(

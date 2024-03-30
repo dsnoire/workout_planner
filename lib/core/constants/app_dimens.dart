@@ -1,3 +1,3 @@
 abstract class AppDimens {
-  static const layoutPadding = 20.0;
+  static const layoutPadding = 16.0;
 }

@@ -73,5 +73,8 @@ abstract class AppTheme {
       ),
       tileColor: AppColors.lightSurface,
     ),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      shape: StadiumBorder(),
+    ),
   );
 }
