@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_dimens.dart';
+import '../widgets/workout_empty_information.dart';
 import 'manage_workout_view.dart';
 import '../../../shared/widgets/custom_app_bar.dart';
 import '../blocs/workout_cubit/workout_cubit.dart';
@@ -27,6 +30,7 @@ class WorkoutsView extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(AppDimens.layoutPadding),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             BlocBuilder<WorkoutCubit, WorkoutState>(
               builder: (context, state) {
@@ -38,7 +42,7 @@ class WorkoutsView extends StatelessWidget {
                   case WorkoutError():
                     return Center(child: Text(state.message));
                   case WorkoutEmpty():
-                    return const Center(child: Text('No workouts'));
+                    return const WorkoutEmptyInfomation();
                 }
               },
             ),

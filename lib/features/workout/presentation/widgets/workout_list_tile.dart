@@ -80,7 +80,9 @@ class WorkoutListTile extends StatelessWidget {
                     ),
                     child: Text(
                       workoutWeekdays.keys.getWeekdayAbbreviation(index: index),
-                      style: Theme.of(context).textTheme.labelMedium,
+                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                            fontWeight: isSelected ? FontWeight.bold : null,
+                          ),
                     ),
                   );
                 },

@@ -48,11 +48,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         showUnselectedLabels: false,
-        showSelectedLabels: false,
+        showSelectedLabels: true,
         items: const [
           BottomNavigationBarItem(
             activeIcon: BottomNavigationBarItemIcon(
-              path: 'assets/icons/home.svg',
+              path: 'assets/icons/home_filled.svg',
               color: Colors.black,
             ),
             icon: BottomNavigationBarItemIcon(
@@ -62,7 +62,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           ),
           BottomNavigationBarItem(
             activeIcon: BottomNavigationBarItemIcon(
-              path: 'assets/icons/workout.svg',
+              path: 'assets/icons/workout_filled.svg',
               color: Colors.black,
             ),
             icon: BottomNavigationBarItemIcon(
