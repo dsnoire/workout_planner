@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class StartDatePicker extends StatefulWidget {
-  final DateTime xd;
+  final DateTime date;
   final Function(DateTime date) onChanged;
   const StartDatePicker({
     Key? key,
-    required this.xd,
+    required this.date,
     required this.onChanged,
   }) : super(key: key);
 
@@ -30,7 +30,7 @@ class _StartDatePickerState extends State<StartDatePicker> {
         const SizedBox(height: 16),
         ListTile(
           leading: const Icon(Icons.calendar_month),
-          title: Text(DateFormat().add_yMMMd().format(widget.xd)),
+          title: Text(DateFormat().add_yMMMd().format(widget.date)),
           onTap: () async {
             DateTime? selectedDate = await showDatePicker(
               context: context,

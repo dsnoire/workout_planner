@@ -115,15 +115,14 @@ class _ManageWorkoutViewState extends State<ManageWorkoutView> {
                 onChanged: (ScheduleEnum? value) {
                   setState(() {
                     schedule = value!;
-                    print(schedule);
                   });
                 }),
             const SizedBox(height: 32),
             StartDatePicker(
-                xd: date,
-                onChanged: (DateTime x) {
+                date: date,
+                onChanged: (DateTime newDate) {
                   setState(() {
-                    date = x;
+                    date = newDate;
                   });
                 }),
             const SizedBox(height: 32),
