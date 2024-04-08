@@ -11,16 +11,29 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
 
   @override
   Future<void> createWorkout(Workout workout) async {
-    await isar.writeTxn(() => isar.workouts.put(workout));
+    await isar.writeTxn(() async => await isar.workouts.put(workout));
+  }
+
+  @override
+  Future<void> updateWorkout(Workout workout) async {
+    await isar.writeTxn(
+      () async {
+        final workoutById = await isar.workouts.get(workout.id);
+        if (workoutById != null) {
+          return isar
+              .writeTxn(() async => await isar.workouts.put(workoutById));
+        }
+      },
+    );
   }
 
   @override
   Future<void> deleteWorkout(Workout workout) async {
-    await isar.writeTxn(() => isar.workouts.delete(workout.id));
+    await isar.writeTxn(() async => await isar.workouts.delete(workout.id));
   }
 
   @override
   Future<void> deleteAllWorkouts() async {
-    await isar.writeTxn(() async => isar.workouts.clear());
+    await isar.writeTxn(() async => await isar.workouts.clear());
   }
 }

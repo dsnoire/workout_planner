@@ -34,6 +34,16 @@ class WorkoutCubit extends Cubit<WorkoutState> {
     }
   }
 
+  Future<void> updateWorkout(Workout workout) async {
+    try {
+      emit(WorkoutLoading());
+      await workoutRepository.updateWorkout(workout);
+      await getAllWorkouts();
+    } catch (e) {
+      emit(WorkoutError(e.toString()));
+    }
+  }
+
   Future<void> deleteWorkout(Workout workout) async {
     try {
       emit(WorkoutLoading());

@@ -92,6 +92,24 @@ class _ManageWorkoutViewState extends State<ManageWorkoutView> {
     await context.read<WorkoutCubit>().createWorkout(workout);
   }
 
+  Future<void> updateWorkout() async {
+    final color = colors.entries
+        .firstWhere((element) => element.value == true,
+            orElse: () => workoutColors.entries.first)
+        .key;
+    final workout = widget.workout!
+      ..name = nameController.text
+      ..color = color
+      ..schedule = schedule
+      ..date = date
+      ..weekdays = weekdays.entries
+          .where((element) => element.value == true)
+          .map((e) => e.key)
+          .toList();
+
+    await context.read<WorkoutCubit>().updateWorkout(workout);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,10 +148,14 @@ class _ManageWorkoutViewState extends State<ManageWorkoutView> {
             const Spacer(),
             ElevatedButton(
               onPressed: () async {
-                await addWorkout();
+                widget.workout == null
+                    ? await addWorkout()
+                    : await updateWorkout();
                 if (context.mounted) Navigator.of(context).pop();
               },
-              child: const Text('Add Workout'),
+              child: Text(
+                widget.workout == null ? 'Create Workout' : 'Update Workout',
+              ),
             ),
           ],
         ),
