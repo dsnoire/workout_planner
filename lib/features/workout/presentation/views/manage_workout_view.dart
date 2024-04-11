@@ -64,57 +64,54 @@ class _ManageWorkoutViewState extends State<ManageWorkoutView> {
       schedule = widget.workout!.schedule;
       date = widget.workout!.date;
       weekdays = workoutWeekdays
-        ..updateAll((key, value) {
-          if (widget.workout!.weekdays.any((element) => element == key)) {
-            return true;
-          } else {
-            return false;
-          }
-        });
+        ..updateAll(
+          (key, value) {
+            if (widget.workout!.weekdays.any((element) => element == key)) {
+              return true;
+            } else {
+              return false;
+            }
+          },
+        );
     }
   }
 
-  Future<void> addWorkout() async {
+  Future<void> createOrUpdateWorkout() async {
     final color = colors.entries
         .firstWhere((element) => element.value == true,
             orElse: () => workoutColors.entries.first)
         .key;
-    final workout = Workout()
-      ..name = nameController.text
-      ..color = color
-      ..schedule = schedule
-      ..date = date
-      ..weekdays = weekdays.entries
-          .where((element) => element.value == true)
-          .map((e) => e.key)
-          .toList();
+    final xweekdays = weekdays.entries
+        .where((element) => element.value == true)
+        .map((e) => e.key)
+        .toList();
 
-    await context.read<WorkoutCubit>().createWorkout(workout);
-  }
-
-  Future<void> updateWorkout() async {
-    final color = colors.entries
-        .firstWhere((element) => element.value == true,
-            orElse: () => workoutColors.entries.first)
-        .key;
-    final workout = widget.workout!
-      ..name = nameController.text
-      ..color = color
-      ..schedule = schedule
-      ..date = date
-      ..weekdays = weekdays.entries
-          .where((element) => element.value == true)
-          .map((e) => e.key)
-          .toList();
-
-    await context.read<WorkoutCubit>().updateWorkout(workout);
+    if (widget.workout == null) {
+      final workout = Workout()
+        ..name = nameController.text
+        ..color = color
+        ..schedule = schedule
+        ..date = date
+        ..weekdays = xweekdays;
+      await context.read<WorkoutCubit>().createWorkout(workout);
+    } else {
+      final workout = widget.workout!
+        ..name = nameController.text
+        ..color = color
+        ..schedule = schedule
+        ..date = date
+        ..weekdays = xweekdays;
+      await context.read<WorkoutCubit>().updateWorkout(workout);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: const CustomAppBar(title: 'New Workout'),
+      appBar: CustomAppBar(
+        title: widget.workout == null ? 'New Workout' : widget.workout!.name,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(AppDimens.layoutPadding),
         child: Column(
@@ -129,28 +126,24 @@ class _ManageWorkoutViewState extends State<ManageWorkoutView> {
             ColorPicker(colors: colors),
             const SizedBox(height: 32),
             SchedulePicker(
-                schedule: schedule,
-                onChanged: (ScheduleEnum? value) {
-                  setState(() {
-                    schedule = value!;
-                  });
-                }),
+              schedule: schedule,
+              onChanged: (ScheduleEnum? value) => setState(
+                () => schedule = value!,
+              ),
+            ),
             const SizedBox(height: 32),
             StartDatePicker(
-                date: date,
-                onChanged: (DateTime newDate) {
-                  setState(() {
-                    date = newDate;
-                  });
-                }),
+              date: date,
+              onChanged: (DateTime newDate) => setState(
+                () => date = newDate,
+              ),
+            ),
             const SizedBox(height: 32),
             WeekdaysPicker(weekdays: weekdays),
             const Spacer(),
             ElevatedButton(
               onPressed: () async {
-                widget.workout == null
-                    ? await addWorkout()
-                    : await updateWorkout();
+                createOrUpdateWorkout();
                 if (context.mounted) Navigator.of(context).pop();
               },
               child: Text(

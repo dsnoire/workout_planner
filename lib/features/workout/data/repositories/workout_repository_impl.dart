@@ -20,8 +20,7 @@ class WorkoutRepositoryImpl implements WorkoutRepository {
       () async {
         final workoutById = await isar.workouts.get(workout.id);
         if (workoutById != null) {
-          return isar
-              .writeTxn(() async => await isar.workouts.put(workoutById));
+          await isar.workouts.put(workout);
         }
       },
     );

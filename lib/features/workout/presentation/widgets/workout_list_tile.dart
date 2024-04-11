@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../domain/models/workout.dart';
@@ -19,10 +20,10 @@ class WorkoutListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (ctx) => ManageWorkoutView(
-                  workout: workout,
-                )));
+        context.push(
+          '/edit-workout',
+          extra: workout,
+        );
       },
       child: Container(
         padding: const EdgeInsets.all(16),
