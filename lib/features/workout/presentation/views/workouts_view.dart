@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/constants/app_colors.dart';
+
 import '../../../../core/constants/app_dimens.dart';
-import '../widgets/workout_empty_information.dart';
-import 'manage_workout_view.dart';
 import '../../../shared/widgets/custom_app_bar.dart';
 import '../blocs/workout_cubit/workout_cubit.dart';
+import '../widgets/workout_empty_information.dart';
 import '../widgets/workouts_list_view.dart';
 
 class WorkoutsView extends StatelessWidget {

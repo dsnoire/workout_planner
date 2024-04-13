@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../domain/models/workout.dart';
-import '../blocs/workout_cubit/workout_cubit.dart';
 import '../utils/extensions/weekday_abbreviation.dart';
 import '../utils/workout_weekdays.dart';
-import '../views/manage_workout_view.dart';
+import 'workout_action_menu.dart';
 
 class WorkoutListTile extends StatelessWidget {
   final Workout workout;
@@ -19,12 +16,7 @@ class WorkoutListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        context.push(
-          '/edit-workout',
-          extra: workout,
-        );
-      },
+      onTap: () {},
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -55,11 +47,7 @@ class WorkoutListTile extends StatelessWidget {
                       .titleMedium!
                       .copyWith(fontWeight: FontWeight.bold),
                 ),
-                PopupMenuButton(
-                  itemBuilder: (BuildContext context) {
-                    return <PopupMenuEntry>[];
-                  },
-                ),
+                WorkoutActionMenu(workout: workout),
               ],
             ),
             Text(

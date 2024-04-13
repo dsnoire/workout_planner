@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../utils/extensions/weekday_abbreviation.dart';
-import '../utils/workout_weekdays.dart';
 
 class WeekdaysPicker extends StatefulWidget {
   final Map<String, bool> weekdays;
@@ -45,7 +44,6 @@ class _WeekdaysPickerState extends State<WeekdaysPicker> {
                           return !value;
                         },
                       );
-                      print(widget.weekdays);
                     },
                   );
                 },
