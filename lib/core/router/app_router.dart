@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/exercise/presentation/views/add_exercise_view.dart';
 import '../../features/home/home_view.dart';
 import '../../features/shared/views/root_view.dart';
 import '../../features/statistics/statistics_view.dart';
 import '../../features/workout/domain/models/workout.dart';
 import '../../features/workout/presentation/views/manage_workout_view.dart';
+import '../../features/workout/presentation/views/workout_view.dart';
 import '../../features/workout/presentation/views/workouts_view.dart';
 
 final GlobalKey<NavigatorState> _rootNavigator = GlobalKey(debugLabel: 'root');
@@ -26,6 +28,16 @@ abstract class AppRouter {
         builder: (context, state) => ManageWorkoutView(
           workout: state.extra as Workout,
         ),
+      ),
+      GoRoute(
+        path: '/workout',
+        builder: (context, state) => WorkoutView(
+          workout: state.extra as Workout,
+        ),
+      ),
+      GoRoute(
+        path: '/add-exercise',
+        builder: (context, state) => const AddExerciseView(),
       ),
       ShellRoute(
         navigatorKey: _shellNavigator,

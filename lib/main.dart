@@ -7,7 +7,6 @@ import 'core/theme/app_theme.dart';
 import 'features/workout/data/repositories/workout_repository_impl.dart';
 import 'features/workout/domain/models/workout.dart';
 import 'features/workout/presentation/blocs/workout_cubit/workout_cubit.dart';
-import 'features/workout/presentation/views/workouts_view.dart';
 
 late Isar isar;
 
